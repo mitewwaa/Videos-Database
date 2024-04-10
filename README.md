@@ -4,7 +4,7 @@ This project was created for the Database Management Systems course at FMI. It f
 
 ## Description
 
-The project aims to facilitate efficient management of video-related data, including user uploads and information about the technologies used in video production.
+The project aims to facilitate efficient management of videos-related data, including user uploads and information about the technologies used in video production.
 
 ## Files
 
