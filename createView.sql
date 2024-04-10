@@ -1,0 +1,64 @@
+SET SCHEMA FN72094;
+
+--views 2023/2024
+
+--Извличане на номер на потребителя, номер на видеото, заглавие, автор, модел на камерата и рейтинг на публикуваното видео
+CREATE VIEW V_VIDEOS_INFO_RATING AS
+SELECT USERNUMBER, VIDEONUMBER, TITLE, AUTHOR, CAMERAMODEL, FN72094.F_CALCULATE_VRATING(VIDEONUMBER) AS RATING
+FROM VIDEOS;
+
+SELECT *
+FROM V_VIDEOS_INFO_RATING
+WHERE RATING > 50000
+ORDER BY RATING DESC;
+
+-- Извличане на номер на потребител, потребителско име и брой нa публикуваните видеа
+CREATE VIEW V_USER_VIDEO_CNT AS
+SELECT U.USERNUMBER,U.USERNAME, FN72094.F_CNT_VIDEOS(U.USERNUMBER) AS CNT_VIDEOS
+FROM USERS U
+LEFT JOIN VIDEOS V ON U.USERNUMBER = V.USERNUMBER
+GROUP BY U.USERNUMBER, U.USERNAME;
+
+SELECT *
+FROM V_USER_VIDEO_CNT
+WHERE CNT_VIDEOS > 6;
+
+--views 2022/2023
+-- readonly
+CREATE VIEW V_VIDEO_TECH
+AS
+SELECT V.TITLE, V.NUMBEROFVIEWS, V.AUTHOR, T.CAMERAMODEL
+FROM VIDEOS V, TECH T
+WHERE V.CAMERAMODEL = T.CAMERAMODEL;
+
+SELECT *
+FROM V_VIDEO_TECH
+WHERE AUTHOR = 'HBO MAX';
+
+
+--updatable
+CREATE VIEW V_USERS_ALL
+AS
+SELECT userNumber, userName, numberOfSubscribers
+FROM USERS
+WHERE numberOfSubscribers < 21500000;
+
+INSERT INTO V_USERS_ALL(userNumber, userName, numberOfSubscribers)
+VALUES ('21365890', 'dogcat44', '2569');
+
+DROP VIEW V_USERS_ALL;
+
+
+-- check option
+CREATE VIEW V_USERS_ALL_WITH_CK
+AS
+SELECT userNumber, userName, numberOfSubscribers
+FROM USERS
+WHERE numberOfSubscribers < 21500000
+WITH CHECK OPTION;
+
+INSERT INTO V_USERS_ALL_WITH_CK(userNumber, userName, numberOfSubscribers)
+VALUES ('21365899', 'dogcat445', '2569'); -- OK
+
+INSERT INTO V_USERS_ALL_WITH_CK(userNumber, userName, numberOfSubscribers)
+VALUES ('21536890', 'dogcat496', '25696654'); -- NOT OK numberOfSubscribers > 21500000
