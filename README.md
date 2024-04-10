@@ -1,4 +1,4 @@
-# Database Management Systems Project
+# Database Management Systems Project - Videoclips
 
 This project was created for the Database Management Systems course at FMI. It focuses on developing a database system for managing videos, user uploads, and video production technologies.
 
